@@ -9,7 +9,13 @@ S3:
 - Data is stored as a CSV (no headers)
 - Data format: `id,name,gender,style,price,releaseDateTimestamp,releasePageUrl,imgUrl`
 
-### Scraper Setup
+
+## AWS Setup
+
+1. Get your AWS CLI credentials from AWS Learner Lab
+2. Modify your `.aws/credetials`
+
+## Scraper Setup
 
 Prerequisitites:
 - Python and pip installed
@@ -26,11 +32,35 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Frontend Setup
+Execute the scraper: `python main_scraper.py`
+
+## Packaging the Lambda function
+
+1. Ensure you have `yarn` installed (refer to frontend section)
+2. Run `yarn zip:lambda` from repo root
+3. Upload `lambda-deployment.zip` to the lambda function on AWS console
+
+## Frontend Setup
+
 Prerequisitites:
-- AWS account
-  - AWS credentials
 - NodeJS v22
 
-Running the frontend:
-- `yarn install`
+Instructions below are run from repo root
+
+### Running the frontend:
+```
+yarn install
+yarn dev
+```
+
+Head over to `localhost:3000`
+
+### Building the frontend:
+```
+yarn build
+```
+
+### Previewing (equivalent of the prod build)
+```
+yarn preview
+```

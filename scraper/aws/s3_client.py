@@ -1,7 +1,12 @@
 import boto3
 import csv
+import logging
 
 from io import StringIO
+
+logger = logging.getLogger()
+logger.setLevel('DEBUG')
+prefix = '[S3]'
 
 def map_to_writer_row(row):
     return row.split(',')
@@ -19,6 +24,8 @@ class S3Client:
             Key = self.key,
         )
 
+        logger.info(f'{prefix}: Successfully fetched shoes data')
+
         rawData = res['Body'].read()
         csvText = rawData.decode('utf-8')
         data = csvText.splitlines()
@@ -29,6 +36,7 @@ class S3Client:
     def get_shoes_ids_map(self):
         shoesData = self.get_shoes_data()
         
+        logger.info(f'{prefix}: Successfully fetched shoes data for IDs')
         ids = {}
         for data in shoesData:
             shoeId = data.split(',')[0]
@@ -50,3 +58,5 @@ class S3Client:
             Key = self.key,
             Body = buffer.getvalue()
         )
+
+        logger.info(f'{prefix}: Successfully uploaded shoes data')
