@@ -32,7 +32,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Execute the scraper: `python main_scraper.py`
+Execute the scraper: `python main_scraper.py` or if you are at repo root, run `yarn scrape`
 
 ## Packaging the Lambda function
 
@@ -47,9 +47,13 @@ Prerequisitites:
 
 Instructions below are run from repo root
 
-### Running the frontend:
+### Install dependencies
 ```
 yarn install
+```
+
+### Running the frontend:
+```
 yarn dev
 ```
 
@@ -60,7 +64,7 @@ Head over to `localhost:3000`
 yarn build
 ```
 
-### Previewing (equivalent of the prod build)
+### Previewing prod
 ```
 yarn preview
 ```

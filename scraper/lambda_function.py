@@ -13,6 +13,12 @@ successMsg = 'Successfully scraped and updated shoes data'
 
 def lambda_handler(event, context):
     logger.info(f'Lambda invoked - beginning Footlocker Release page scraping')
+
+    if event.Records and event.Records[0]:
+        logger.info(f'Lambda invoked by {event.Records[0].eventSource}')
+    else:
+         logger.info(f'Lambda invoked by unknown trigger')
+
     try:
         newEntries = scrape_and_write_to_s3()
 

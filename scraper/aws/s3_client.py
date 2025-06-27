@@ -56,7 +56,8 @@ class S3Client:
         self._client.put_object(
             Bucket = self.bucket,
             Key = self.key,
-            Body = buffer.getvalue()
+            Body = buffer.getvalue(),
+            ContentType = 'text/csv'
         )
 
         logger.info(f'{prefix}: Successfully uploaded shoes data')
