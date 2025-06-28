@@ -1,6 +1,6 @@
 import { Box, Divider, Typography } from '@mui/material';
 import DataTable from './components/DataTable';
-import useTableData from './hoooks/useTableData';
+import useTableData from './hooks/useTableData';
 import ActionButtons from './components/ActionButtons';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider, useAtom } from 'jotai';

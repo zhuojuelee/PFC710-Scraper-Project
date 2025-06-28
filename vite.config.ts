@@ -11,6 +11,9 @@ const filesPathToExclude = filesNeedToExclude.map((src) => {
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
+  define: {
+    global: {},
+  },
   plugins: [react()],
   server: {
     port: 3000,

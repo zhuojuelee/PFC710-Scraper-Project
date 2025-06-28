@@ -5,8 +5,6 @@ import SendIcon from '@mui/icons-material/Send';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import shoesAtom from "../../atoms/shoesAtom";
 import { useAtom } from "jotai";
-import AwsLambdaClient from "../../aws/lambdaClient";
-import AwsSnsClient from "../../aws/snsClient";
 
 const iconSx = {
   height: 50,
@@ -17,7 +15,6 @@ function ActionButtons() {
   const [{ refetch }] = useAtom(shoesAtom);
 
   const invokeLambdaToScrape = useCallback(() => {
-    AwsLambdaClient.invokeShoesLambda();
   }, [])
 
   const fetchLatestData = useCallback(() => {
@@ -25,7 +22,6 @@ function ActionButtons() {
   }, []);
 
   const sendSnsNotif = useCallback(() => {
-    AwsSnsClient.sendMessage('CHECK OUR APP NOW!');
   }, []);
 
   return (

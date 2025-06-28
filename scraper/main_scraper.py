@@ -40,3 +40,5 @@ def scrape_and_write_to_s3():
     s3Client.upload_shoes_data(dataToUpload)
 
     return newData
+
+scrape_and_write_to_s3()

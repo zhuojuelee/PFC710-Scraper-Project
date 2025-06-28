@@ -7,6 +7,7 @@ from io import StringIO
 logger = logging.getLogger()
 logger.setLevel('DEBUG')
 prefix = '[S3]'
+headers = ['id', 'name', 'gender', 'style', 'price', 'releaseDateTimestamp', 'releasePageUrl', 'imgUrl']
 
 def map_to_writer_row(row):
     return row.split(',')
@@ -30,6 +31,7 @@ class S3Client:
         csvText = rawData.decode('utf-8')
         data = csvText.splitlines()
         reader = csv.reader(data)
+        next(reader)
         csvData = [','.join(row) for row in reader]
         return csvData
     
@@ -51,6 +53,7 @@ class S3Client:
         writer = csv.writer(buffer)
 
         content = map(map_to_writer_row, csvData)
+        writer.writerow(headers)
         writer.writerows(content)
 
         self._client.put_object(
