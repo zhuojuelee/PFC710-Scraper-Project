@@ -2,6 +2,7 @@ import { Box, Divider, Typography } from '@mui/material';
 import DataTable from './components/DataTable';
 import useTableData from './hooks/useTableData';
 import ActionButtons from './components/ActionButtons';
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider, useAtom } from 'jotai';
 import shoesAtom from './atoms/shoesAtom';
@@ -17,13 +18,16 @@ function App() {
       <Provider>
         <Box sx={{ p:2 }}>
           <Box sx={{ display: 'flex', flexDirection: 'row' , justifyContent: 'space-between' }}>
-            <Typography variant="h5">FootLocker Releases</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
+              <InfoOutlineIcon sx={{ height: 40, width: 40, color: 'coral' }} />
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>FootLocker Releases</Typography>
+            </Box>
             <ActionButtons />
           </Box>
-          <Divider sx={{ marginY: 2 }} />
-          <Typography variant="h6">Upcoming Releases</Typography>
+          <Divider sx={{ marginY: 3 }} />
+          <Typography variant="h6">Upcoming Releases {`[${upcoming.length}]`}</Typography>
           <DataTable data={upcoming} />
-          <Typography variant="h6">Past Releases</Typography>
+          <Typography variant="h6">Past Releases {`[${past.length}]`}</Typography>
           <DataTable data={past} />
         </Box>
       </Provider>

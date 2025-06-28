@@ -3,7 +3,7 @@ import { mockData } from "../../mockData";
 import Papa from "papaparse";
 import type { ShoesData } from "../../types";
 
-const shoesAtom = atomWithSuspenseQuery(_get => {
+const shoesAtom = atomWithSuspenseQuery(() => {
   return {
     queryKey: ['shoes'],
     queryFn: async () => {
@@ -13,7 +13,7 @@ const shoesAtom = atomWithSuspenseQuery(_get => {
 
       const res = await fetch('http://pfc710-shoes.s3-website-us-east-1.amazonaws.com/data.csv');
       if (!res.ok) {
-        return []        
+        return [];
       }
 
       const dataCsvAsString = await res.text();
@@ -23,7 +23,6 @@ const shoesAtom = atomWithSuspenseQuery(_get => {
         skipEmptyLines: true,
       });
 
-      console.log(parsedData.data)
       return parsedData.data;
     },
   };
