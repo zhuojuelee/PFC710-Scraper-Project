@@ -39,4 +39,4 @@ def scrape_and_write_to_s3():
 
     return newData
 
-scrape_and_write_to_s3()
+# scrape_and_write_to_s3()
