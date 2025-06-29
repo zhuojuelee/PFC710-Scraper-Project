@@ -24,7 +24,7 @@ const shoesAtom = atomWithSuspenseQuery(() => {
         };
       }
 
-      const lastUpdatedAt: LastUpdatedAt = res.headers.get('Last-Modified');
+      const lastUpdatedAt: LastUpdatedAt = res.headers.get('last-modified');
       const dataCsvAsString = await res.text();
       const parsedData = Papa.parse<ShoesData>(dataCsvAsString, {
         delimiter: ',',

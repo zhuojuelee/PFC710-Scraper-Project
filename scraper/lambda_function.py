@@ -28,7 +28,7 @@ def lambda_handler(event, context):
 
         logger.info(f'[Lambda:Handler] {successMsg}')
         logger.info(f'[Lambda:Handler] {len(newEntries)} new entries added')
-        snsClient.send_message(f'{msgSubject}: Success', f'{successMsg} - {newEntries} added')
+        snsClient.send_message(f'{msgSubject}: Success', f'{successMsg} - {len(newEntries)} new entries added')
 
         return {
             'statusCode': 200,

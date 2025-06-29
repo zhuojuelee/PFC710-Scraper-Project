@@ -1,5 +1,7 @@
 import requests
+
 from bs4 import BeautifulSoup
+from .product_container import ProductContainer
 
 URL: str = 'https://www.footlocker.ca/en/release-dates'
 
@@ -12,14 +14,21 @@ class FootLockerReleasePage:
     def __init__(self):
         response = requests.get(URL)
         soup = BeautifulSoup(response.content, 'html5lib')
-        productContainers = soup.find_all('div', attrs = RELEASE_PRODUCT_CONTAINER_ATTR)
+        productContainersSoup = soup.find_all(
+            'div', 
+            attrs = RELEASE_PRODUCT_CONTAINER_ATTR
+        )
 
-        # set
+        productContainers = map(
+            (lambda product: ProductContainer(product)), 
+            productContainersSoup
+        )
+        # setters
         self.soup = soup
         self.productContainers = productContainers
 
     def get_page_soup(self):
         return self.soup
     
-    def get_all_product_containers(self):
+    def get_all_product_containers(self) -> list[ProductContainer]:
         return self.productContainers

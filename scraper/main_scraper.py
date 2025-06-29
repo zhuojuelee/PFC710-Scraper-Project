@@ -1,6 +1,5 @@
 from aws.s3_client import S3Client
 from pom.footlocker_release_page import FootLockerReleasePage
-from pom.product_container import ProductContainer
 
 def scrape_and_write_to_s3():
     # init aws clients
@@ -13,8 +12,7 @@ def scrape_and_write_to_s3():
 
     # process all containers
     newData = []
-    for productContainerSoup in allProductContainers:
-        product = ProductContainer(productContainerSoup)
+    for product in allProductContainers:
         productId = product.get_product_id()
 
         # check if product has been scraped before
@@ -41,4 +39,4 @@ def scrape_and_write_to_s3():
 
     return newData
 
-# scrape_and_write_to_s3()
+scrape_and_write_to_s3()
