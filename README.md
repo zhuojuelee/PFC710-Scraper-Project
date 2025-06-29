@@ -17,9 +17,10 @@ S3:
 
 ## Scraper Setup
 
-Prerequisitites:
+### Prerequisitites:
 - Python and pip installed
 
+### Virualenv Setup
 Follow the following instructions to setup the virtual env:
 ```bin\bash
 cd scraper
@@ -34,15 +35,20 @@ pip install -r requirements.txt
 
 Uncomment `scrape_and_write_to_s3()` at the end of `main_scraper.py`.
 
-Execute the scraper: `python main_scraper.py` or if you are at repo root, run `yarn scrape`
+### Executimg the scraper:
+```
+`python main_scraper.py`
+```
+
+If you are at repo root, run `yarn scrape`
 
 ## Packaging the Lambda function
 
-1. Ensure you have `yarn` installed (refer to frontend section)
+1. Ensure you have `yarn` installed (refer to dashboard section)
 2. Run `yarn zip:lambda` from repo root
 3. Upload `lambda-deployment.zip` to the lambda function on AWS console
 
-## Frontend Setup
+## Dashboard UI Setup
 
 Prerequisitites:
 - NodeJS v22
@@ -54,14 +60,14 @@ Instructions below are run from repo root
 yarn install
 ```
 
-### Running the frontend:
+### Running the dashboard:
 ```
 yarn dev
 ```
 
 Head over to `localhost:3000`
 
-### Building the frontend:
+### Building the dashboard:
 ```
 yarn build
 ```
