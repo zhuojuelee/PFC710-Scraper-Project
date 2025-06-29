@@ -11,7 +11,9 @@ function App() {
   const queryClient = new QueryClient();
 
   const [{ data: shoesData }] = useAtom(shoesAtom);
-  const { upcoming, past } = useTableData(shoesData);
+  const { upcoming, past } = useTableData(shoesData.data);
+
+  const lastUpdatedAt = shoesData.lastUpdatedAt;
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -20,7 +22,10 @@ function App() {
           <Box sx={{ display: 'flex', flexDirection: 'row' , justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
               <AutoGraphIcon sx={{ height: 40, width: 40, color: 'coral' }} />
-              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>FootLocker Releases</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                FootLocker Releases
+              </Typography>
+              <Typography>Last Updated at {lastUpdatedAt ?? 'unknown'}</Typography>
             </Box>
             <ActionButtons />
           </Box>

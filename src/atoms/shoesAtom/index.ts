@@ -3,19 +3,28 @@ import { mockData } from "../../mockData";
 import Papa from "papaparse";
 import type { ShoesData } from "../../types";
 
+type LastUpdatedAt = string | null;
+
 const shoesAtom = atomWithSuspenseQuery(() => {
   return {
     queryKey: ['shoes'],
     queryFn: async () => {
       if (import.meta.env.VITE_USE_MOCK_DATA === 'true') {
-        return mockData;
+        return {
+          lastUpdatedAt: 'Sun, 29 Jun 2025 04:44:51 GMT',
+          data: mockData
+        };
       }
 
       const res = await fetch('http://pfc710-shoes.s3-website-us-east-1.amazonaws.com/data.csv');
       if (!res.ok) {
-        return [];
+        return {
+          lastUpdatedAt: null,
+          data: []
+        };
       }
 
+      const lastUpdatedAt: LastUpdatedAt = res.headers.get('Last-Modified');
       const dataCsvAsString = await res.text();
       const parsedData = Papa.parse<ShoesData>(dataCsvAsString, {
         delimiter: ',',
@@ -23,7 +32,10 @@ const shoesAtom = atomWithSuspenseQuery(() => {
         skipEmptyLines: true,
       });
 
-      return parsedData.data;
+      return {
+        lastUpdatedAt,
+        data: parsedData.data
+      };
     },
   };
 });
