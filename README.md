@@ -6,7 +6,7 @@ Seneca PFC710 Web Scraper project
 
 S3:
 - S3 bucket name is `pfc710-shoes`
-- Data is stored as a CSV (no headers)
+- Data is stored as a CSV `data.csv`
 - Data format: `id,name,gender,style,price,releaseDateTimestamp,releasePageUrl,imgUrl`
 
 
