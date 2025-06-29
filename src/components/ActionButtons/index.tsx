@@ -117,13 +117,13 @@ function ActionButtons() {
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <ToastAlert open={toastOpen} severity={toastSeverity} msg={toastMsg} handleClose={handleClose} />
       <IconButton sx={iconSx} onClick={invokeLambdaToScrape}>
-        <SyncAltIcon />
+        <SyncAltIcon sx={{ color: '#6573c3' }} />
       </IconButton>
       <IconButton sx={iconSx} onClick={fetchLatestData}>
-        <RefreshIcon />
+        <RefreshIcon sx={{ color: '#00a152' }} />
       </IconButton>
       <IconButton sx={iconSx} onClick={sendSnsNotif}>
-        <SendIcon />
+        <SendIcon sx={{ color: '#d500f9' }} />
       </IconButton>
     </Box>
   )
