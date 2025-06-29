@@ -9,12 +9,12 @@ def scrape_and_write_to_s3():
 
     # get footlocker release page and its products
     footLockerReleasePage = FootLockerReleasePage()
-    productContainers = footLockerReleasePage.get_all_product_containers()
+    allProductContainers = footLockerReleasePage.get_all_product_containers()
 
     # process all containers
     newData = []
-    for product in productContainers:
-        product = ProductContainer(product)
+    for productContainerSoup in allProductContainers:
+        product = ProductContainer(productContainerSoup)
         productId = product.get_product_id()
 
         # check if product has been scraped before
