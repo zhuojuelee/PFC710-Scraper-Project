@@ -1,40 +1,16 @@
-import { Alert, Box, IconButton, Snackbar, type AlertColor, type SnackbarCloseReason } from "@mui/material";
+import { Box, IconButton, type AlertColor, type SnackbarCloseReason } from "@mui/material";
 import { memo, useCallback, useState } from "react";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import shoesAtom from "../../atoms/shoesAtom";
 import { useAtom } from "jotai";
+import ToastAlert from "../ToastAlert";
 
 const iconSx = {
   height: 50,
   width: 50,
 };
-
-function ToastAlert({ 
-  severity,
-  open,
-  msg,
-  handleClose 
-}: { 
-  severity: AlertColor,
-  open: boolean,
-  msg: string,
-  handleClose: () => void 
-}) {
-  return (
-    <Snackbar open={open} autoHideDuration={2_500} onClose={handleClose}>
-      <Alert
-        onClose={handleClose}
-        severity={severity}
-        variant="filled"
-        sx={{ width: '100%' }}
-       >
-        {msg}
-    </Alert>
-    </Snackbar>
-  )
-}
 
 function ActionButtons() {
   const [toastOpen, setToastOpen] = useState(false);
@@ -65,12 +41,12 @@ function ActionButtons() {
     if (!res.ok) {
       setToastSeverity('error');
       setToastMsg('An error occured when invoking Lambda');
-      setToastOpen(true);
     } else {
       setToastSeverity('success');
       setToastMsg('Successfully invoked Lambda');
-      setToastOpen(true);
     }
+
+    setToastOpen(true);
   }, [toastOpen])
 
   const fetchLatestData = useCallback(() => {
@@ -104,13 +80,12 @@ function ActionButtons() {
     if (!res.ok) {
       setToastSeverity('error');
       setToastMsg('Failed to inform subscribers');
-      setToastOpen(true);
     } else {
       setToastSeverity('success');
       setToastMsg('Alerted subscribers');
-      setToastOpen(true);
     }
 
+    setToastOpen(true);
   }, [toastOpen]);
 
   return (
