@@ -13,8 +13,8 @@ def scrape_and_write_to_s3():
 
     # process all containers
     newData = []
-    for i in range(len(productContainers)):
-        product = ProductContainer(productContainers[i])
+    for product in productContainers:
+        product = ProductContainer(product)
         productId = product.get_product_id()
 
         # check if product has been scraped before
@@ -41,4 +41,4 @@ def scrape_and_write_to_s3():
 
     return newData
 
-scrape_and_write_to_s3()
+# scrape_and_write_to_s3()

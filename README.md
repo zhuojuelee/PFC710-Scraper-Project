@@ -32,6 +32,8 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Uncomment `scrape_and_write_to_s3()` at the end of `main_scraper.py`.
+
 Execute the scraper: `python main_scraper.py` or if you are at repo root, run `yarn scrape`
 
 ## Packaging the Lambda function
