@@ -30,17 +30,7 @@ class ProductContainer:
     def get_product_name(self):
         span = self.soup.find('span', create_class_atr_util(PRODUCT_NAME_PRIMARY_CLASSNAME))
         return span.text
-    
-    """
-    <p class="ProductGenderStyles ProductGenderStyles--inProductCard">
-        <span>
-            <span class="visually-hidden">Gender:</span>MENS
-        </span>
-        <span>
-            <span class="visually-hidden">Color:</span>WHITE/METALLIC SILVER/WHITE
-        </span>
-    </p>
-    """
+
     def get_product_gender(self):
         p = self.soup.find('p', create_class_atr_util(PRODUCT_GENDER_STYLES_CLASSNAME))
         spans = p.find_all('span', recursive=False)

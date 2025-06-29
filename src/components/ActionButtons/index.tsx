@@ -23,7 +23,7 @@ function ToastAlert({
   handleClose: () => void 
 }) {
   return (
-    <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+    <Snackbar open={open} autoHideDuration={2_500} onClose={handleClose}>
       <Alert
         onClose={handleClose}
         severity={severity}
@@ -46,11 +46,11 @@ function ActionButtons() {
     _event?: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
     ) => {
-        if (reason === 'clickaway') {
+      if (reason === 'clickaway') {
         return;
-    }
+      }
 
-    setToastOpen(false);
+      setToastOpen(false);
   }, []);
 
   const invokeLambdaToScrape = useCallback(async () => {
