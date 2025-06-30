@@ -2,7 +2,7 @@ import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHe
 import PreviewIcon from '@mui/icons-material/Preview';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { memo, useCallback, useMemo, useState } from "react";
-import type { TableData } from "../../types";
+import type { Status, TableData } from "../../types";
 import Preview from "../Preview";
 import StatusChip from "../StatusChip";
 import { useAtom, useAtomValue } from "jotai";
@@ -35,15 +35,24 @@ function unixToDate(timestamp: number) {
   return `${day}/${month}/${year}`;
 }
 
-function DataTable({ data } : { data: TableData[] }) {
+function DataTable({ data } : { data: TableData[]; }) {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
   // watch list states
   const watchlistToggle = useAtomValue(toggleWatchlistAtom)
   const [watchList, setWatchList] = useAtom(watchlistAtom);
 
-  const onClickReleasePage = useCallback((url: string) => {
-    window.open(url, '_blank')
+  const onClickReleasePage = useCallback((
+    url: string,
+    id: string,
+    status: Status
+  ) => {
+    let linkUrl: string = url;
+    if (status === 'RELEASED') {
+      linkUrl = `https://www.footlocker.ca/en/product/~/${id}.html`;
+      window.open();
+    }
+    window.open(linkUrl, '_blank');
   }, []);
 
   const onClickWatch = useCallback((id: string) => {
@@ -65,7 +74,7 @@ function DataTable({ data } : { data: TableData[] }) {
       return data.filter(shoe => !!watchList[shoe.id]);
     }
 
-    return data
+    return data;
   }, [data, watchList, watchlistToggle])
 
   return (
@@ -109,7 +118,7 @@ function DataTable({ data } : { data: TableData[] }) {
               <TableCell align="left">{`$${Number(row.price).toFixed(2)}`}</TableCell>
               <TableCell align="left">{unixToDate(row.releaseDateTimestamp)}</TableCell>
               <TableCell align="left">
-                <IconButton onClick={() => onClickReleasePage(row.releasePageUrl)}>
+                <IconButton onClick={() => onClickReleasePage(row.releasePageUrl, row.id, row.status)}>
                   <OpenInNewIcon />
                 </IconButton>
               </TableCell>

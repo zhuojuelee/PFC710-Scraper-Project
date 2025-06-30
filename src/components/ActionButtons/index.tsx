@@ -1,18 +1,21 @@
-import { Box, CircularProgress, Fab, Typography, type AlertColor, type SnackbarCloseReason, type SxProps } from "@mui/material";
+import { Box, CircularProgress, Divider, Fab, Typography, type AlertColor, type SnackbarCloseReason, type SxProps } from "@mui/material";
 import { memo, useCallback, useState, type ReactNode } from "react";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
+import MergeTypeIcon from '@mui/icons-material/MergeType';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import shoesAtom from "../../atoms/shoesAtom";
 import { useAtom } from "jotai";
 import ToastAlert from "../ToastAlert";
 import { toggleWatchlistAtom } from "../../atoms/watchlistAtom";
+import displayAllDataAtom from "../../atoms/displayAllDataAtom";
 
 const fabColor = '#fafafa';
+const mergeColor = '#00bcd4'
 const syncColor = '#6573c3';
 const refreshColor = '#00a152';
 const sendColor = '#d500f9';
-const watchOnColor = '#c8e6c9';
+const toggleColor = '#c8e6c9';
 
 const iconSx = {
   height: 50,
@@ -59,6 +62,7 @@ function ActionButtons() {
   const [isInvokingLambda, setIsInvokingLambda] = useState<boolean>(false);
   const [isSendingSnsMsg, setIsSendingSnsMsg] = useState<boolean>(false);
 
+  const [displayAllData, setDisplayAllData] = useAtom(displayAllDataAtom);
   const [toggleWatch, setToggleWatch] = useAtom(toggleWatchlistAtom);
   const [{ refetch, isFetching }] = useAtom(shoesAtom);
 
@@ -95,13 +99,19 @@ function ActionButtons() {
     setIsInvokingLambda(false);
   }, [toastOpen])
 
-  const fetchLatestData = useCallback(() => {
+  const fetchLatestData = useCallback(async() => {
     if (toastOpen) {
         setToastOpen(false);
     }
 
     try {
-      refetch();
+      const { data } = await refetch();
+      if (data?.error) {
+        setToastSeverity('error');
+        setToastMsg(data.error);
+        setToastOpen(true);
+        return;
+      }
     } catch {
       setToastSeverity('error');
       setToastMsg('An error occurred when refetching data');
@@ -144,15 +154,26 @@ function ActionButtons() {
     }
   }, [setToggleWatch, toggleWatch]);
 
+  const onDisplayAllData = useCallback(() => {
+    setDisplayAllData(!displayAllData);
+  }, [displayAllData, setDisplayAllData])
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
       <ToastAlert open={toastOpen} severity={toastSeverity} msg={toastMsg} handleClose={handleClose} />
       <SuspendableFloatingButton
-        sx={toggleWatch ? { background: watchOnColor } : {}}
+        sx={displayAllData ? { background: toggleColor } : {}}
+        onClick={onDisplayAllData}
+        >
+        <MergeTypeIcon sx={{ color: mergeColor }} />
+      </SuspendableFloatingButton>
+      <SuspendableFloatingButton
+        sx={toggleWatch ? { background: toggleColor } : {}}
         onClick={onToggleWatchlist}
         >
         <Typography variant="h6">✅</Typography>
       </SuspendableFloatingButton>
+      <Divider orientation="vertical" />
       <SuspendableFloatingButton
         color={syncColor}
         isLoading={isInvokingLambda}

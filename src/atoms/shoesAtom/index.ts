@@ -18,9 +18,11 @@ const shoesAtom = atomWithSuspenseQuery(() => {
 
       const res = await fetch('http://pfc710-shoes.s3-website-us-east-1.amazonaws.com/data.csv');
       if (!res.ok) {
+        const errorRes = await res.json();
         return {
           lastUpdatedAt: null,
-          data: []
+          data: [],
+          error: errorRes.message ?? `Failed to fetch data: ${errorRes.message}`
         };
       }
 
