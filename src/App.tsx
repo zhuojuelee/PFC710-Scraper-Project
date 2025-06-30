@@ -61,7 +61,9 @@ function App() {
           </Alert>
           <DataTable data={upcoming} />
           <Alert severity="warning" sx={{ alignItems: 'center' }}>
-            <Typography variant="h6">{`${past.length} Past Releases`}</Typography>
+            <Typography variant="h6">
+              {`${past.length} Past Releases - Preview and Info Page may not be unavailable`}
+            </Typography>
           </Alert>
           <DataTable data={past} />
         </Box>
