@@ -1,7 +1,14 @@
 import boto3
 import json
 
-arn = 'arn:aws:sns:us-east-1:392175866244:shoes-topic'
+admin_topic_arn = 'arn:aws:sns:us-east-1:392175866244:shoes-topic'
+subscriber_topic_arn = 'arn:aws:sns:us-east-1:392175866244:subscriber-topic'
+all_topics = [admin_topic_arn, subscriber_topic_arn]
+cors_headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "OPTIONS,POST"
+}
 
 def lambda_handler(event, context):
     # init SNS client
@@ -14,34 +21,33 @@ def lambda_handler(event, context):
     # check if it was triggered via the subscribe API
     if path == "/sns/subscribe" and email:
         print(f"New request t subscribe from email: {email}")
+        # alert admin of new subscriber
         client.publish(
-            TopicArn = arn,
+            TopicArn = admin_topic_arn,
             Subject = 'New Subscriber',
             Message = f"Received subscription request: {email}"
         )
 
+        # subscribe new email to subscriber topic
         client.subscribe(
-            TopicArn=arn,
+            TopicArn=subscriber_topic_arn,
             Protocol='email',
             Endpoint=email,
         )
 
         return {
             "statusCode": 200,
-            "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "OPTIONS,POST"
-            },
+            "headers": cors_headers,
             "body": f"Received subscription request: {email}"
         }
     
-    client = boto3.client('sns')
-    client.publish(
-        TopicArn = arn,
-        Subject = 'Dashboard Update',
-        Message = 'Check out the dashboard!'
-    )
+    # publish message to all subscribers
+    for topic_arn in all_topics:
+        client.publish(
+            TopicArn = topic_arn,
+            Subject = 'Dashboard Update',
+            Message = 'Check out the dashboard!'
+        )
 
     return {
         'statusCode': 200,
