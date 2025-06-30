@@ -7,7 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-scraper/build
+build
+sns-lambda-deployment.zip
 lambda-deployment.zip
 .env
 venv

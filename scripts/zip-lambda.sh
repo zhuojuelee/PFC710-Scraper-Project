@@ -1,7 +1,7 @@
 #!/bin/bash
 LAMBDA_DIR="scraper"
 BUILD_DIR="scraper/build"
-ZIP_FILE="lambda-deployment.zip"
+ZIP_FILE="scraper-lambda-deployment.zip"
 
 # clean up
 rm -rf $BUILD_DIR $ZIP_FILE
@@ -25,4 +25,4 @@ cd "$BUILD_DIR"
 zip -r "../../$ZIP_FILE" .
 cd -
 
-echo "Lambda package built at $ZIP_FILE"
+echo "Scraper Lambda package built at $ZIP_FILE"

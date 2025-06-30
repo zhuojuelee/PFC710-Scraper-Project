@@ -4,15 +4,18 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import shoesAtom from "../../atoms/shoesAtom";
 import { useAtom } from "jotai";
 import ToastAlert from "../ToastAlert";
 import { toggleWatchlistAtom } from "../../atoms/watchlistAtom";
 import displayAllDataAtom from "../../atoms/displayAllDataAtom";
+import SubscribeModal from "../SubscribeModal";
 
 const fabColor = '#fafafa';
 const mergeColor = '#00bcd4'
 const syncColor = '#6573c3';
+const notifColor = '#f9a825';
 const refreshColor = '#00a152';
 const sendColor = '#d500f9';
 const toggleColor = '#c8e6c9';
@@ -61,6 +64,9 @@ function ActionButtons() {
   // status states
   const [isInvokingLambda, setIsInvokingLambda] = useState<boolean>(false);
   const [isSendingSnsMsg, setIsSendingSnsMsg] = useState<boolean>(false);
+
+  // subscribe modal
+  const [subscribeModalOpen, setSubscribeModalOpen] = useState<boolean>(false);
 
   const [displayAllData, setDisplayAllData] = useAtom(displayAllDataAtom);
   const [toggleWatch, setToggleWatch] = useAtom(toggleWatchlistAtom);
@@ -156,10 +162,36 @@ function ActionButtons() {
 
   const onDisplayAllData = useCallback(() => {
     setDisplayAllData(!displayAllData);
-  }, [displayAllData, setDisplayAllData])
+  }, [displayAllData, setDisplayAllData]);
+
+  const onSubscribe = useCallback((success: boolean, email: string, errorMsg?: string) => {
+    if (errorMsg) {
+      setToastSeverity('error');
+      setToastMsg(errorMsg);
+      setToastOpen(true);
+      setSubscribeModalOpen(false);
+      return;
+    }
+
+    if (success) {
+      setToastSeverity('success');
+      setToastMsg(`${email} successfully subscribed`);
+    } else {
+      setToastSeverity('error');
+      setToastMsg('Failed to subscribed to SNS topic');
+    }
+
+    setSubscribeModalOpen(false);
+    setToastOpen(true);
+  }, [])
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+      <SubscribeModal
+        open={subscribeModalOpen}
+        onClose={() => setSubscribeModalOpen(false)}
+        onSubscribe={onSubscribe}
+      />
       <ToastAlert open={toastOpen} severity={toastSeverity} msg={toastMsg} handleClose={handleClose} />
       <SuspendableFloatingButton
         sx={displayAllData ? { background: toggleColor } : {}}
@@ -174,6 +206,11 @@ function ActionButtons() {
         <Typography variant="h6">✅</Typography>
       </SuspendableFloatingButton>
       <Divider orientation="vertical" />
+      <SuspendableFloatingButton
+        onClick={() => setSubscribeModalOpen(true)}
+        >
+        <NotificationAddIcon sx={{ color: notifColor }} />
+      </SuspendableFloatingButton>
       <SuspendableFloatingButton
         color={syncColor}
         isLoading={isInvokingLambda}
