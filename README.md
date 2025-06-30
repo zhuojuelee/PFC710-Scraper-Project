@@ -1,6 +1,6 @@
 # PFC710 - Assignment 1
 
-Seneca PFC710 Web Scraper project
+Seneca Polytechnic PFC710 (Project 1) Web Scraper
 
 ## Information
 
@@ -8,7 +8,6 @@ S3:
 - S3 bucket name is `pfc710-shoes`
 - Data is stored as a CSV `data.csv`
 - Data format: `id,name,gender,style,price,releaseDateTimestamp,releasePageUrl,imgUrl`
-
 
 ## AWS Setup
 
@@ -42,11 +41,13 @@ Uncomment `scrape_and_write_to_s3()` at the end of `main_scraper.py`.
 
 If you are at repo root, run `yarn scrape`
 
-## Packaging the Lambda function
+## Packaging the Lambda functions
 
 1. Ensure you have `yarn` installed (refer to dashboard section)
-2. Run `yarn zip:lambda` from repo root
-3. Upload `lambda-deployment.zip` to the lambda function on AWS console
+2. Run `yarn zip:lambda:scraper` to build the Shoes Lambda
+3. Run `yarn zip:lambda:sns` to build the SNS Lambda
+4. Upload `lambda-deployment.zip` to the Shoes Lambda function through the AWS console
+5. Upload `sns-lambda-deployment.zip` to the SNS Lamda function through the AWS console
 
 ## Dashboard UI Setup
 
