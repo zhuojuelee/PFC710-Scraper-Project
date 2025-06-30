@@ -1,16 +1,19 @@
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import PreviewIcon from '@mui/icons-material/Preview';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import type { TableData } from "../../types";
 import Preview from "../Preview";
 import StatusChip from "../StatusChip";
+import { useAtom, useAtomValue } from "jotai";
+import { toggleWatchlistAtom, watchlistAtom } from "../../atoms/watchlistAtom";
 
 type MetaData = {
   id: string;
   label: string;
 };
 
+const headerColor = '#eeeeee';
 const columns: MetaData[] = [
   { id: 'id', label: 'ID' },
   { id: 'name', label: 'Name' },
@@ -20,7 +23,8 @@ const columns: MetaData[] = [
   { id: 'style', label: 'Style' },
   { id: 'price', label: 'Price' },
   { id: 'releaseDateTimestamp', label: 'Release Date' },
-  { id: 'releasePageUrl', label: 'Release Page' },
+  { id: 'releasePageUrl', label: 'Info Page' },
+  { id: 'watchList', label: 'Watch'},
 ];
 
 function unixToDate(timestamp: number) {
@@ -34,17 +38,43 @@ function unixToDate(timestamp: number) {
 function DataTable({ data } : { data: TableData[] }) {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
+  // watch list states
+  const watchlistToggle = useAtomValue(toggleWatchlistAtom)
+  const [watchList, setWatchList] = useAtom(watchlistAtom);
+
   const onClickReleasePage = useCallback((url: string) => {
     window.open(url, '_blank')
-  }, [])
+  }, []);
+
+  const onClickWatch = useCallback((id: string) => {
+    const idFound = watchList[id];
+    if (!idFound) {
+      setWatchList({
+        ...watchList,
+        [id]: true,
+      });
+    } else {
+      const watchListCopy = {...watchList};
+      delete watchListCopy[id];
+      setWatchList(watchListCopy);
+    }
+  }, [setWatchList, watchList]);
+
+  const filteredData = useMemo(() => {
+    if (watchlistToggle) {
+      return data.filter(shoe => !!watchList[shoe.id]);
+    }
+
+    return data
+  }, [data, watchList, watchlistToggle])
 
   return (
-    <TableContainer sx={{ marginY: 4 }} component={Paper}>
+    <TableContainer sx={{ marginY: 3 }} component={Paper}>
       <Table>
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ backgroundColor: headerColor }}>
             {columns.map(col => (
-              <TableCell align="left">
+              <TableCell align="left" key={`header-${col.id}`}>
                 <Typography sx={{ fontWeight: 'bold' }}>
                   {col.label}
                 </Typography>
@@ -53,8 +83,15 @@ function DataTable({ data } : { data: TableData[] }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(row => (
+          {filteredData.length === 0 && (
             <TableRow>
+              <TableCell colSpan={columns.length} align="center">
+                <Typography>No data available</Typography>
+              </TableCell>
+            </TableRow>
+          )}
+          {filteredData.length > 0 && filteredData.map(row => (
+            <TableRow key={`row-${row.id}`}>
               <TableCell align="left">{row.id}</TableCell>
               <TableCell align="left">{row.name}</TableCell>
               <TableCell align="left">
@@ -74,6 +111,11 @@ function DataTable({ data } : { data: TableData[] }) {
               <TableCell align="left">
                 <IconButton onClick={() => onClickReleasePage(row.releasePageUrl)}>
                   <OpenInNewIcon />
+                </IconButton>
+              </TableCell>
+              <TableCell align="left">
+                <IconButton onClick={() => onClickWatch(row.id)}>
+                  <Typography variant="h6">{watchList[row.id] ? '✅' : '👀'}</Typography>
                 </IconButton>
               </TableCell>
             </TableRow>

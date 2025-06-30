@@ -1,22 +1,53 @@
-import { Box, CircularProgress, Fab, type AlertColor, type SnackbarCloseReason } from "@mui/material";
-import { memo, useCallback, useState } from "react";
+import { Box, CircularProgress, Fab, Typography, type AlertColor, type SnackbarCloseReason, type SxProps } from "@mui/material";
+import { memo, useCallback, useState, type ReactNode } from "react";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import shoesAtom from "../../atoms/shoesAtom";
 import { useAtom } from "jotai";
 import ToastAlert from "../ToastAlert";
+import { toggleWatchlistAtom } from "../../atoms/watchlistAtom";
 
 const fabColor = '#fafafa';
 const syncColor = '#6573c3';
 const refreshColor = '#00a152';
 const sendColor = '#d500f9';
+const watchOnColor = '#c8e6c9';
 
 const iconSx = {
   height: 50,
   width: 50,
   backgroundColor: fabColor,
 };
+
+function SuspendableFloatingButton({
+  color,
+  children,
+  isLoading = false,
+  sx = {},
+  onClick,
+}: {
+  color?: string;
+  children: ReactNode;
+  isLoading?: boolean;
+  sx?: SxProps;
+  onClick: () => void;
+}) {
+  return (
+    <Fab sx={{ ...iconSx, ...sx }} onClick={onClick} disabled={isLoading}>
+      {children}
+      {isLoading && (
+        <CircularProgress size={60} 
+          sx={{
+            color: color,
+            position: 'absolute',
+            zIndex: 1,
+          }}/>
+        )
+      }
+    </Fab>
+  );
+}
 
 function ActionButtons() {
   // toast states
@@ -28,6 +59,7 @@ function ActionButtons() {
   const [isInvokingLambda, setIsInvokingLambda] = useState<boolean>(false);
   const [isSendingSnsMsg, setIsSendingSnsMsg] = useState<boolean>(false);
 
+  const [toggleWatch, setToggleWatch] = useAtom(toggleWatchlistAtom);
   const [{ refetch, isFetching }] = useAtom(shoesAtom);
 
   const handleClose = useCallback((
@@ -104,45 +136,44 @@ function ActionButtons() {
     setIsSendingSnsMsg(false);
   }, [toastOpen]);
 
+  const onToggleWatchlist = useCallback(() => {
+    if (toggleWatch) {
+      setToggleWatch(false);
+    } else {
+      setToggleWatch(true);
+    }
+  }, [setToggleWatch, toggleWatch]);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
       <ToastAlert open={toastOpen} severity={toastSeverity} msg={toastMsg} handleClose={handleClose} />
-      <Fab sx={iconSx} onClick={invokeLambdaToScrape}>
+      <SuspendableFloatingButton
+        sx={toggleWatch ? { background: watchOnColor } : {}}
+        onClick={onToggleWatchlist}
+        >
+        <Typography variant="h6">✅</Typography>
+      </SuspendableFloatingButton>
+      <SuspendableFloatingButton
+        color={syncColor}
+        isLoading={isInvokingLambda}
+        onClick={invokeLambdaToScrape}
+        >
         <SyncAltIcon sx={{ color: syncColor }} />
-        {isInvokingLambda && (
-          <CircularProgress size={60} 
-            sx={{
-              color: syncColor,
-              position: 'absolute',
-              zIndex: 1,
-            }}/>
-          )
-        }
-      </Fab>
-      <Fab sx={iconSx} onClick={fetchLatestData}>
+      </SuspendableFloatingButton>
+      <SuspendableFloatingButton
+        color={refreshColor}
+        isLoading={isFetching}
+        onClick={fetchLatestData}
+        >
         <RefreshIcon sx={{ color: refreshColor }} />
-        {isFetching && (
-          <CircularProgress size={60} 
-            sx={{
-              color: refreshColor,
-              position: 'absolute',
-              zIndex: 1,
-            }}/>
-          )
-        }
-      </Fab>
-      <Fab sx={iconSx} onClick={sendSnsNotif}>
+      </SuspendableFloatingButton>
+      <SuspendableFloatingButton
+        color={sendColor}
+        isLoading={isSendingSnsMsg}
+        onClick={sendSnsNotif}
+        >
         <SendIcon sx={{ color: sendColor }} />
-        {isSendingSnsMsg && (
-          <CircularProgress size={60} 
-            sx={{
-              color: sendColor,
-              position: 'absolute',
-              zIndex: 1,
-            }}/>
-          )
-        }
-      </Fab>
+      </SuspendableFloatingButton>
     </Box>
   )
 };

@@ -32,10 +32,12 @@ def scrape_and_write_to_s3():
 
         newData.append(csvRow)
 
-    # join old and new data, then upload
-    oldData = s3Client.get_shoes_data()
-    dataToUpload = oldData + newData
-    s3Client.upload_shoes_data(dataToUpload)
+    # update if there is new data
+    if len(newData) > 0:
+        # get old data and join with new data
+        oldData = s3Client.get_shoes_data()
+        dataToUpload = oldData + newData
+        s3Client.upload_shoes_data(dataToUpload)
 
     return newData
 
