@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Modal, Typography } from "@mui/material";
+import { Box, Button, TextField, Modal, Typography, LinearProgress } from "@mui/material";
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import { memo, useCallback, useState } from "react";
 
@@ -26,6 +26,7 @@ function SubscribeModal({
   onSubscribe: (success: boolean, email: string, errorMsg?: string) => void;
 }) {
   const [email, setEmail] = useState<string>('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
   const onEmailChange = useCallback((
     e: React.ChangeEvent<HTMLInputElement>
@@ -39,6 +40,7 @@ function SubscribeModal({
       return;
     }
 
+    setIsSubscribing(true);
     const res = await fetch(
       `https://zzi7cyl4fe.execute-api.us-east-1.amazonaws.com/shoesLambda/sns/subscribe?email=${email}`, 
       {
@@ -51,6 +53,8 @@ function SubscribeModal({
     } else {
       onSubscribe(true, email);
     }
+
+    setIsSubscribing(false);
   }, [email, onSubscribe]);
 
   return (
@@ -62,6 +66,10 @@ function SubscribeModal({
         <Typography variant="h6" component="h2">
           Please enter your E-mail to subscribe
         </Typography>
+        <LinearProgress 
+          {...(!isSubscribing && { variant: 'determinate', value: 0 })}
+          sx={{ marginY: 1 }}
+        />
         <Box sx={{ display: 'flex', mt: 3, justifyContent: 'space-between', gap: 2 }}>
           <TextField 
             label="E-mail"
@@ -70,6 +78,7 @@ function SubscribeModal({
             onChange={onEmailChange}
           />
           <Button
+            disabled={isSubscribing}
             variant="contained"
             onClick={onSubscribeClick}
             endIcon={<NotificationAddIcon />}
