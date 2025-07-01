@@ -1,7 +1,7 @@
-import { atomWithSuspenseQuery } from "jotai-tanstack-query";
-import { mockData } from "../../mockData";
-import Papa from "papaparse";
-import type { ShoesData } from "../../types";
+import { atomWithSuspenseQuery } from 'jotai-tanstack-query';
+import { mockData } from '../../mockData';
+import Papa from 'papaparse';
+import type { ShoesData } from '../../types';
 
 type LastUpdatedAt = string | null;
 
@@ -12,7 +12,7 @@ const shoesAtom = atomWithSuspenseQuery(() => {
       if (import.meta.env.VITE_USE_MOCK_DATA === 'true') {
         return {
           lastUpdatedAt: 'Sun, 29 Jun 2025 04:44:51 GMT',
-          data: mockData
+          data: mockData,
         };
       }
 
@@ -22,7 +22,7 @@ const shoesAtom = atomWithSuspenseQuery(() => {
         return {
           lastUpdatedAt: null,
           data: [],
-          error: errorRes.message ?? `Failed to fetch data: ${errorRes.message}`
+          error: errorRes.message ?? `Failed to fetch data: ${errorRes.message}`,
         };
       }
 
@@ -36,7 +36,7 @@ const shoesAtom = atomWithSuspenseQuery(() => {
 
       return {
         lastUpdatedAt,
-        data: parsedData.data
+        data: parsedData.data,
       };
     },
     staleTime: 0,

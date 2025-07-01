@@ -1,4 +1,4 @@
-export type Status = 'UPCOMING' | 'RELEASED'
+export type Status = 'UPCOMING' | 'RELEASED';
 
 export type ShoesData = {
   id: string;
@@ -11,7 +11,7 @@ export type ShoesData = {
   imgUrl: string;
 };
 
-export type TableData = {
+export type ShoesTableData = {
   id: string;
   name: string;
   status: Status;
@@ -20,5 +20,5 @@ export type TableData = {
   style: string;
   price: number;
   releaseDateTimestamp: number;
-  releasePageUrl: string; 
+  releasePageUrl: string;
 };

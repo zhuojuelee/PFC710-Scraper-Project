@@ -26,7 +26,7 @@ const convertToEst = (timeStr: string | null) => {
   };
 
   return `${new Intl.DateTimeFormat('en-US', options).format(date)} EST`;
-}
+};
 
 function App() {
   const queryClient = new QueryClient();
@@ -36,12 +36,12 @@ function App() {
   const lastUpdatedTimeInEst = useMemo(() => {
     return convertToEst(shoesData.lastUpdatedAt);
   }, [shoesData.lastUpdatedAt]);
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <Provider>
-        <Box sx={{ p:2 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row' , justifyContent: 'space-between' }}>
+        <Box sx={{ p: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
               <AutoGraphIcon sx={{ height: 40, width: 40, color: 'coral' }} />
               <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
@@ -57,7 +57,7 @@ function App() {
         </Box>
       </Provider>
     </QueryClientProvider>
-  )
+  );
 }
 
 export default memo(App);

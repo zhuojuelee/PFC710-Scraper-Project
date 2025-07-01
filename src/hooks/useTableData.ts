@@ -1,22 +1,22 @@
-import { useMemo } from "react";
-import type { ShoesData, TableData } from "../types";
+import { useMemo } from 'react';
+import type { ShoesData, ShoesTableData } from '../types';
 
-type ProcessedTableData = {
-  upcoming: TableData[];
-  past: TableData[];
-  all: TableData[];
+type ProcessedShoesTableData = {
+  upcoming: ShoesTableData[];
+  past: ShoesTableData[];
+  all: ShoesTableData[];
 };
 
-export default function(shoesData: ShoesData[]) {
-  const tableData: ProcessedTableData = useMemo(() => {
-    const upcoming: TableData[] = [];
-    const past: TableData[] = [];
-    const all: TableData[] = []
-    
+export default function (shoesData: ShoesData[]) {
+  const ShoesTableData: ProcessedShoesTableData = useMemo(() => {
+    const upcoming: ShoesTableData[] = [];
+    const past: ShoesTableData[] = [];
+    const all: ShoesTableData[] = [];
+
     const timeNow = Date.now() / 1_000; // convert to seconds
     for (const data of shoesData) {
       if (data.releaseDateTimestamp < timeNow) {
-        const releasedProduct: TableData = {
+        const releasedProduct: ShoesTableData = {
           id: data.id,
           name: data.name,
           status: 'RELEASED',
@@ -25,12 +25,12 @@ export default function(shoesData: ShoesData[]) {
           style: data.style,
           price: data.price,
           releaseDateTimestamp: data.releaseDateTimestamp,
-          releasePageUrl: data.releasePageUrl
+          releasePageUrl: data.releasePageUrl,
         };
         past.push(releasedProduct);
         all.push(releasedProduct);
       } else {
-        const upcomingProduct: TableData = {
+        const upcomingProduct: ShoesTableData = {
           id: data.id,
           name: data.name,
           status: 'UPCOMING',
@@ -39,7 +39,7 @@ export default function(shoesData: ShoesData[]) {
           style: data.style,
           price: data.price,
           releaseDateTimestamp: data.releaseDateTimestamp,
-          releasePageUrl: data.releasePageUrl
+          releasePageUrl: data.releasePageUrl,
         };
         upcoming.push(upcomingProduct);
         all.push(upcomingProduct);
@@ -51,9 +51,9 @@ export default function(shoesData: ShoesData[]) {
       past,
       all,
     };
-  }, [shoesData])
+  }, [shoesData]);
 
   return {
-    ...tableData,
+    ...ShoesTableData,
   };
 }

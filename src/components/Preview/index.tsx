@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
-import { memo } from "react";
+import { Box } from '@mui/material';
+import { memo } from 'react';
 
 function Preview({ imgSrc }: { imgSrc: string }) {
   return (
-    <Box 
+    <Box
       component="img"
       src={imgSrc}
       alt="Preview"
@@ -17,7 +17,7 @@ function Preview({ imgSrc }: { imgSrc: string }) {
         backgroundColor: 'white',
       }}
     />
-  )
-};
+  );
+}
 
 export default memo(Preview);

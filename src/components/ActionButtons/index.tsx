@@ -1,19 +1,28 @@
-import { Box, CircularProgress, Divider, Fab, Typography, type AlertColor, type SnackbarCloseReason, type SxProps } from "@mui/material";
-import { memo, useCallback, useState, type ReactNode } from "react";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Fab,
+  Typography,
+  type AlertColor,
+  type SnackbarCloseReason,
+  type SxProps,
+} from '@mui/material';
+import { memo, useCallback, useState, type ReactNode } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
-import shoesAtom from "../../atoms/shoesAtom";
-import { useAtom } from "jotai";
-import ToastAlert from "../ToastAlert";
-import { toggleWatchlistAtom } from "../../atoms/watchlistAtom";
-import displayAllDataAtom from "../../atoms/displayAllDataAtom";
-import SubscribeModal from "../SubscribeModal";
+import shoesAtom from '../../atoms/shoesAtom';
+import { useAtom } from 'jotai';
+import ToastAlert from '../ToastAlert';
+import { toggleWatchlistAtom } from '../../atoms/watchlistAtom';
+import displayAllDataAtom from '../../atoms/displayAllDataAtom';
+import SubscribeModal from '../SubscribeModal';
 
 const fabColor = '#fafafa';
-const mergeColor = '#00bcd4'
+const mergeColor = '#00bcd4';
 const syncColor = '#6573c3';
 const notifColor = '#f9a825';
 const refreshColor = '#00a152';
@@ -43,14 +52,15 @@ function SuspendableFloatingButton({
     <Fab sx={{ ...iconSx, ...sx }} onClick={onClick} disabled={isLoading}>
       {children}
       {isLoading && (
-        <CircularProgress size={60} 
+        <CircularProgress
+          size={60}
           sx={{
             color: color,
             position: 'absolute',
             zIndex: 1,
-          }}/>
-        )
-      }
+          }}
+        />
+      )}
     </Fab>
   );
 }
@@ -72,21 +82,18 @@ function ActionButtons() {
   const [toggleWatch, setToggleWatch] = useAtom(toggleWatchlistAtom);
   const [{ refetch, isFetching }] = useAtom(shoesAtom);
 
-  const handleClose = useCallback((
-    _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-    ) => {
-      if (reason === 'clickaway') {
-        return;
-      }
+  const handleClose = useCallback((_event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-      setToastOpen(false);
+    setToastOpen(false);
   }, []);
 
   const invokeLambdaToScrape = useCallback(async () => {
     setIsInvokingLambda(true);
     if (toastOpen) {
-        setToastOpen(false);
+      setToastOpen(false);
     }
 
     const res = await fetch('https://zzi7cyl4fe.execute-api.us-east-1.amazonaws.com/shoesLambda', {
@@ -103,11 +110,11 @@ function ActionButtons() {
 
     setToastOpen(true);
     setIsInvokingLambda(false);
-  }, [toastOpen])
+  }, [toastOpen]);
 
-  const fetchLatestData = useCallback(async() => {
+  const fetchLatestData = useCallback(async () => {
     if (toastOpen) {
-        setToastOpen(false);
+      setToastOpen(false);
     }
 
     try {
@@ -133,11 +140,11 @@ function ActionButtons() {
   const sendSnsNotif = useCallback(async () => {
     setIsSendingSnsMsg(false);
     if (toastOpen) {
-        setToastOpen(false);
+      setToastOpen(false);
     }
 
     const res = await fetch('https://zzi7cyl4fe.execute-api.us-east-1.amazonaws.com/shoesLambda/sns', {
-      method: 'post'
+      method: 'post',
     });
 
     if (!res.ok) {
@@ -183,7 +190,7 @@ function ActionButtons() {
 
     setSubscribeModalOpen(false);
     setToastOpen(true);
-  }, [])
+  }, []);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
@@ -193,47 +200,27 @@ function ActionButtons() {
         onSubscribe={onSubscribe}
       />
       <ToastAlert open={toastOpen} severity={toastSeverity} msg={toastMsg} handleClose={handleClose} />
-      <SuspendableFloatingButton
-        sx={displayAllData ? { background: toggleColor } : {}}
-        onClick={onDisplayAllData}
-        >
+      <SuspendableFloatingButton sx={displayAllData ? { background: toggleColor } : {}} onClick={onDisplayAllData}>
         <MergeTypeIcon sx={{ color: mergeColor }} />
       </SuspendableFloatingButton>
-      <SuspendableFloatingButton
-        sx={toggleWatch ? { background: toggleColor } : {}}
-        onClick={onToggleWatchlist}
-        >
+      <SuspendableFloatingButton sx={toggleWatch ? { background: toggleColor } : {}} onClick={onToggleWatchlist}>
         <Typography variant="h6">✅</Typography>
       </SuspendableFloatingButton>
       <Divider orientation="vertical" />
-      <SuspendableFloatingButton
-        onClick={() => setSubscribeModalOpen(true)}
-        >
+      <SuspendableFloatingButton onClick={() => setSubscribeModalOpen(true)}>
         <NotificationAddIcon sx={{ color: notifColor }} />
       </SuspendableFloatingButton>
-      <SuspendableFloatingButton
-        color={syncColor}
-        isLoading={isInvokingLambda}
-        onClick={invokeLambdaToScrape}
-        >
+      <SuspendableFloatingButton color={syncColor} isLoading={isInvokingLambda} onClick={invokeLambdaToScrape}>
         <SyncAltIcon sx={{ color: syncColor }} />
       </SuspendableFloatingButton>
-      <SuspendableFloatingButton
-        color={refreshColor}
-        isLoading={isFetching}
-        onClick={fetchLatestData}
-        >
+      <SuspendableFloatingButton color={refreshColor} isLoading={isFetching} onClick={fetchLatestData}>
         <RefreshIcon sx={{ color: refreshColor }} />
       </SuspendableFloatingButton>
-      <SuspendableFloatingButton
-        color={sendColor}
-        isLoading={isSendingSnsMsg}
-        onClick={sendSnsNotif}
-        >
+      <SuspendableFloatingButton color={sendColor} isLoading={isSendingSnsMsg} onClick={sendSnsNotif}>
         <SendIcon sx={{ color: sendColor }} />
       </SuspendableFloatingButton>
     </Box>
-  )
-};
+  );
+}
 
 export default memo(ActionButtons);

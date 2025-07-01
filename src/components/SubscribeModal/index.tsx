@@ -1,6 +1,6 @@
-import { Box, Button, TextField, Modal, Typography, LinearProgress } from "@mui/material";
+import { Box, Button, TextField, Modal, Typography, LinearProgress } from '@mui/material';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useState } from 'react';
 
 const style = {
   position: 'absolute',
@@ -28,9 +28,7 @@ function SubscribeModal({
   const [email, setEmail] = useState<string>('');
   const [isSubscribing, setIsSubscribing] = useState(false);
 
-  const onEmailChange = useCallback((
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const onEmailTextFieldChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   }, []);
 
@@ -42,10 +40,10 @@ function SubscribeModal({
 
     setIsSubscribing(true);
     const res = await fetch(
-      `https://zzi7cyl4fe.execute-api.us-east-1.amazonaws.com/shoesLambda/sns/subscribe?email=${email}`, 
+      `https://zzi7cyl4fe.execute-api.us-east-1.amazonaws.com/shoesLambda/sns/subscribe?email=${email}`,
       {
-        method: 'post'
-      }
+        method: 'post',
+      },
     );
 
     if (!res.ok) {
@@ -58,25 +56,14 @@ function SubscribeModal({
   }, [email, onSubscribe]);
 
   return (
-    <Modal
-    open={open}
-    onClose={onClose}
-    >
+    <Modal open={open} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h6" component="h2">
           Please enter your E-mail to subscribe
         </Typography>
-        <LinearProgress 
-          {...(!isSubscribing && { variant: 'determinate', value: 0 })}
-          sx={{ marginY: 1 }}
-        />
+        <LinearProgress {...(!isSubscribing && { variant: 'determinate', value: 0 })} sx={{ marginY: 1 }} />
         <Box sx={{ display: 'flex', mt: 3, justifyContent: 'space-between', gap: 2 }}>
-          <TextField 
-            label="E-mail"
-            variant="outlined"
-            sx={{ width: 275 }}
-            onChange={onEmailChange}
-          />
+          <TextField label="E-mail" variant="outlined" sx={{ width: 275 }} onChange={onEmailTextFieldChange} />
           <Button
             disabled={isSubscribing}
             variant="contained"
@@ -89,6 +76,6 @@ function SubscribeModal({
       </Box>
     </Modal>
   );
-};
+}
 
 export default memo(SubscribeModal);
