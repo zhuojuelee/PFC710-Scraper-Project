@@ -54,3 +54,13 @@ class ProductContainer:
         timestamp = int(dt.timestamp())
         return timestamp
         
+    def get_data_as_csv_row(self):
+        return ','.join([
+            self.get_product_id(),
+            self.get_product_gender(),
+            self.get_product_style(),
+            self.get_price(),
+            str(self.get_release_date_timestamp()),
+            self.get_release_page_url(),
+            self.get_img_src(),
+        ])

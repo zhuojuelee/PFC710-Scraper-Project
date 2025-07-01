@@ -2,7 +2,7 @@ from aws.s3_client import S3Client
 from pom.footlocker_release_page import FootLockerReleasePage
 
 def scrape_and_write_to_s3():
-    # init aws clients
+    # init s3 client and get existing IDs
     s3Client = S3Client()
     shoeIds = s3Client.get_shoes_ids_map()
 
@@ -19,17 +19,7 @@ def scrape_and_write_to_s3():
         if productId in shoeIds:
             continue
         
-        csvRow = ','.join([
-            productId,
-            product.get_product_name(),
-            product.get_product_gender(),
-            product.get_product_style(),
-            product.get_price(),
-            str(product.get_release_date_timestamp()),
-            product.get_release_page_url(),
-            product.get_img_src(),
-        ])
-
+        csvRow = product.get_data_as_csv_row()
         newData.append(csvRow)
 
     # update if there is new data
