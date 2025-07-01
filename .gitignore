@@ -9,7 +9,7 @@ lerna-debug.log*
 
 build
 sns-lambda-deployment.zip
-lambda-deployment.zip
+scraper-lambda-deployment.zip
 .env
 venv
 node_modules

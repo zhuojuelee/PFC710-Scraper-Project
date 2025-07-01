@@ -8,7 +8,6 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "s3": "npx vite-node scripts/s3.ts",
     "zip:lambda:scraper": "sh scripts/zip-lambda.sh",
     "zip:lambda:sns": "sh scripts/zip-sns-lambda.sh",
     "scrape": "python scraper/main_scraper.py"

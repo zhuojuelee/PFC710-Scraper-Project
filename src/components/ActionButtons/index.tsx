@@ -14,17 +14,20 @@ import SendIcon from '@mui/icons-material/Send';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import shoesAtom from '../../atoms/shoesAtom';
 import { useAtom } from 'jotai';
 import ToastAlert from '../ToastAlert';
 import { toggleWatchlistAtom } from '../../atoms/watchlistAtom';
 import displayAllDataAtom from '../../atoms/displayAllDataAtom';
 import SubscribeModal from '../SubscribeModal';
+import displayRawDataAtom from '../../atoms/displayRawDataAtom';
 
 const fabColor = '#fafafa';
+const shinyColor = '#f9a825';
 const mergeColor = '#00bcd4';
 const syncColor = '#6573c3';
-const notifColor = '#f9a825';
+const notifColor = '#0288d1';
 const refreshColor = '#00a152';
 const sendColor = '#d500f9';
 const toggleColor = '#c8e6c9';
@@ -78,6 +81,7 @@ function ActionButtons() {
   // subscribe modal
   const [subscribeModalOpen, setSubscribeModalOpen] = useState<boolean>(false);
 
+  const [displayRawData, setDisplayRawData] = useAtom(displayRawDataAtom);
   const [displayAllData, setDisplayAllData] = useAtom(displayAllDataAtom);
   const [toggleWatch, setToggleWatch] = useAtom(toggleWatchlistAtom);
   const [{ refetch, isFetching }] = useAtom(shoesAtom);
@@ -159,6 +163,10 @@ function ActionButtons() {
     setIsSendingSnsMsg(false);
   }, [toastOpen]);
 
+  const onToggleDisplayRawData = useCallback(() => {
+    setDisplayRawData(!displayRawData);
+  }, [displayRawData, setDisplayRawData]);
+
   const onToggleWatchlist = useCallback(() => {
     if (toggleWatch) {
       setToggleWatch(false);
@@ -200,6 +208,13 @@ function ActionButtons() {
         onSubscribe={onSubscribe}
       />
       <ToastAlert open={toastOpen} severity={toastSeverity} msg={toastMsg} handleClose={handleClose} />
+      <SuspendableFloatingButton
+        sx={!displayRawData ? { background: toggleColor } : {}}
+        onClick={onToggleDisplayRawData}
+      >
+        <AutoAwesomeIcon sx={{ color: shinyColor }} />
+      </SuspendableFloatingButton>
+      <Divider orientation="vertical" />
       <SuspendableFloatingButton sx={displayAllData ? { background: toggleColor } : {}} onClick={onDisplayAllData}>
         <MergeTypeIcon sx={{ color: mergeColor }} />
       </SuspendableFloatingButton>

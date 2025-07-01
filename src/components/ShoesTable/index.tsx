@@ -6,13 +6,30 @@ import shoesAtom from '../../atoms/shoesAtom';
 import useTableData from '../../hooks/useTableData';
 import { memo } from 'react';
 import { toggleWatchlistAtom } from '../../atoms/watchlistAtom';
+import displayRawDataAtom from '../../atoms/displayRawDataAtom';
 
 function ShoesTable() {
+  const displayRawData = useAtomValue(displayRawDataAtom);
   const displayAllData = useAtomValue(displayAllDataAtom);
   const toggleWatchlist = useAtomValue(toggleWatchlistAtom);
 
   const [{ data: shoesData }] = useAtom(shoesAtom);
   const { upcoming, past, all: allData } = useTableData(shoesData.data);
+
+  if (displayRawData) {
+    return (
+      <>
+        <Alert severity="info" sx={{ alignItems: 'center', marginBottom: 2 }}>
+          <Typography variant="h6">Raw data</Typography>
+        </Alert>
+        {shoesData.data.map((product) => {
+          const { id, name, gender, style, price, releaseDateTimestamp, releasePageUrl, imgUrl } = product;
+          const row = [id, name, gender, style, price, releaseDateTimestamp, releasePageUrl, imgUrl].join(',');
+          return <tr><Typography sx={{ borderBottom: 1 }}>{row}</Typography></tr>;
+        })}
+      </>
+    );
+  }
 
   return (
     <>

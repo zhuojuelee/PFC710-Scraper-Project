@@ -7,6 +7,7 @@ import { Provider, useAtom } from 'jotai';
 import shoesAtom from './atoms/shoesAtom';
 import { memo, useMemo } from 'react';
 import ShoesTable from './components/ShoesTable';
+import packageJson from '../package.json';
 
 const convertToEst = (timeStr: string | null) => {
   if (!timeStr) {
@@ -44,11 +45,15 @@ function App() {
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
               <AutoGraphIcon sx={{ height: 40, width: 40, color: 'coral' }} />
-              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                Foot Locker Releases
-              </Typography>
-              <Typography>Last Updated at {lastUpdatedTimeInEst}</Typography>
-              <AccessTimeIcon sx={{ marginX: -1 }} />
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                  Foot Locker Scraper Data Dashboard {`v${packageJson.version}`}
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                  <Typography>Data last updated at {lastUpdatedTimeInEst}</Typography>
+                  <AccessTimeIcon sx={{ marginLeft: 1 }} />
+                </Box>
+              </Box>
             </Box>
             <ActionButtons />
           </Box>
