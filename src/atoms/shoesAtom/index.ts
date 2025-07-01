@@ -7,7 +7,7 @@ type LastUpdatedAt = string | null;
 
 const shoesAtom = atomWithSuspenseQuery(() => {
   return {
-    queryKey: ['shoes'],
+    queryKey: ['shoes', Date.now()],
     queryFn: async () => {
       if (import.meta.env.VITE_USE_MOCK_DATA === 'true') {
         return {
@@ -39,6 +39,7 @@ const shoesAtom = atomWithSuspenseQuery(() => {
         data: parsedData.data
       };
     },
+    staleTime: 0,
   };
 });
 
