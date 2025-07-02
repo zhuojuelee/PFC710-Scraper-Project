@@ -142,7 +142,7 @@ function ActionButtons() {
   }, [refetch, toastOpen]);
 
   const sendSnsNotif = useCallback(async () => {
-    setIsSendingSnsMsg(false);
+    setIsSendingSnsMsg(true);
     if (toastOpen) {
       setToastOpen(false);
     }
