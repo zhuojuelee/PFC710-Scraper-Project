@@ -58,7 +58,7 @@ function DataTable({ data }: { data: ShoesTableData[] }) {
     let linkUrl: string = url;
     if (status === 'RELEASED') {
       linkUrl = `https://www.footlocker.ca/en/product/~/${id}.html`;
-      window.open(linkUrl);
+      window.open(linkUrl, '_blank');
     }
     window.open(linkUrl, '_blank');
   }, []);
