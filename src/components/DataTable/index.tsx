@@ -19,23 +19,25 @@ import { useAtom, useAtomValue } from 'jotai'
 import { toggleWatchlistAtom, watchlistAtom } from '../../atoms/watchlistAtom'
 
 type Column = {
-  id: string
-  label: string
+  id: string;
+  label: string;
+  width: number;
+  align?: 'left' | 'center' | 'right';
 }
 
 const headerColor = '#eeeeee'
 const columns: Column[] = [
-  { id: 'id', label: 'ID' },
-  { id: 'name', label: 'Name' },
-  { id: 'status', label: 'Status' },
-  { id: 'previewImgSrc', label: 'Preview' },
-  { id: 'gender', label: 'Gender' },
-  { id: 'style', label: 'Style' },
-  { id: 'price', label: 'Price' },
-  { id: 'releaseDateTimestamp', label: 'Release Date' },
-  { id: 'releasePageUrl', label: 'Info Page' },
-  { id: 'watchList', label: 'Watch' },
-]
+  { id: 'id', label: 'ID', width: 100 },
+  { id: 'name', label: 'Name', width: 400 },
+  { id: 'status', label: 'Status', width: 150, align: 'center' },
+  { id: 'previewImgSrc', label: 'Preview', width: 60, align: 'center' },
+  { id: 'gender', label: 'Gender', width: 350 },
+  { id: 'style', label: 'Style', width: 550 },
+  { id: 'price', label: 'Price', width: 150, align: 'center' },
+  { id: 'releaseDateTimestamp', label: 'Release Date', width: 150, align: 'center' },
+  { id: 'releasePageUrl', label: 'Info Page', width: 120, align: 'center' },
+  { id: 'watchList', label: 'Watch', width: 150, align: 'center' },
+];
 
 function unixToDate(timestamp: number) {
   const date = new Date(timestamp * 1000) // Convert seconds to milliseconds
@@ -92,7 +94,7 @@ function DataTable({ data }: { data: ShoesTableData[] }) {
         <TableHead>
           <TableRow sx={{ backgroundColor: headerColor }}>
             {columns.map((col) => (
-              <TableCell align="left" key={`header-${col.id}`}>
+              <TableCell align={col.align ?? 'left'} key={`header-${col.id}`} sx={{ width: col.width }}>
                 <Typography sx={{ fontWeight: 'bold' }}>{col.label}</Typography>
               </TableCell>
             ))}
@@ -111,11 +113,11 @@ function DataTable({ data }: { data: ShoesTableData[] }) {
               <TableRow key={`row-${row.id}`}>
                 <TableCell align="left">{row.id}</TableCell>
                 <TableCell align="left">{row.name}</TableCell>
-                <TableCell align="left">
+                <TableCell align="center">
                   <StatusChip status={row.status} />
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   onMouseEnter={() => setHoveredCell(row.id)}
                   onMouseLeave={() => setHoveredCell(null)}
                 >
@@ -124,14 +126,14 @@ function DataTable({ data }: { data: ShoesTableData[] }) {
                 </TableCell>
                 <TableCell align="left">{row.gender}</TableCell>
                 <TableCell align="left">{row.style}</TableCell>
-                <TableCell align="left">{`$${Number(row.price).toFixed(2)}`}</TableCell>
-                <TableCell align="left">{unixToDate(row.releaseDateTimestamp)}</TableCell>
-                <TableCell align="left">
+                <TableCell align="center">{`$${Number(row.price).toFixed(2)}`}</TableCell>
+                <TableCell align="center">{unixToDate(row.releaseDateTimestamp)}</TableCell>
+                <TableCell align="center">
                   <IconButton onClick={() => onClickReleasePage(row.releasePageUrl, row.id, row.status)}>
                     <OpenInNewIcon />
                   </IconButton>
                 </TableCell>
-                <TableCell align="left">
+                <TableCell align="center">
                   <IconButton onClick={() => onClickWatch(row.id)}>
                     <Typography variant="h6">{watchList[row.id] ? '✅' : '👀'}</Typography>
                   </IconButton>
