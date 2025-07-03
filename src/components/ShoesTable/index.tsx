@@ -25,7 +25,11 @@ function ShoesTable() {
         {shoesData.data.map((product) => {
           const { id, name, gender, style, price, releaseDateTimestamp, releasePageUrl, imgUrl } = product;
           const row = [id, name, gender, style, price, releaseDateTimestamp, releasePageUrl, imgUrl].join(',');
-          return <tr><Typography sx={{ borderBottom: 1 }}>{row}</Typography></tr>;
+          return (
+            <tr>
+              <Typography sx={{ borderBottom: 1 }}>{row}</Typography>
+            </tr>
+          );
         })}
       </>
     );

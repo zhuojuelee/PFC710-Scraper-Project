@@ -8,24 +8,24 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material'
-import PreviewIcon from '@mui/icons-material/Preview'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
-import { memo, useCallback, useMemo, useState } from 'react'
-import type { Status, ShoesTableData } from '../../types'
-import Preview from '../Preview'
-import StatusChip from '../StatusChip'
-import { useAtom, useAtomValue } from 'jotai'
-import { toggleWatchlistAtom, watchlistAtom } from '../../atoms/watchlistAtom'
+} from '@mui/material';
+import PreviewIcon from '@mui/icons-material/Preview';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { memo, useCallback, useMemo, useState } from 'react';
+import type { Status, ShoesTableData } from '../../types';
+import Preview from '../Preview';
+import StatusChip from '../StatusChip';
+import { useAtom, useAtomValue } from 'jotai';
+import { toggleWatchlistAtom, watchlistAtom } from '../../atoms/watchlistAtom';
 
 type Column = {
   id: string;
   label: string;
   width: number;
   align?: 'left' | 'center' | 'right';
-}
+};
 
-const headerColor = '#eeeeee'
+const headerColor = '#eeeeee';
 const columns: Column[] = [
   { id: 'id', label: 'ID', width: 100 },
   { id: 'name', label: 'Name', width: 400 },
@@ -40,53 +40,53 @@ const columns: Column[] = [
 ];
 
 function unixToDate(timestamp: number) {
-  const date = new Date(timestamp * 1000) // Convert seconds to milliseconds
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based
-  const year = date.getFullYear()
-  return `${day}/${month}/${year}`
+  const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 function DataTable({ data }: { data: ShoesTableData[] }) {
-  const [hoveredCell, setHoveredCell] = useState<string | null>(null)
+  const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
   // watch list states
-  const watchlistToggle = useAtomValue(toggleWatchlistAtom)
-  const [watchList, setWatchList] = useAtom(watchlistAtom)
+  const watchlistToggle = useAtomValue(toggleWatchlistAtom);
+  const [watchList, setWatchList] = useAtom(watchlistAtom);
 
   const onClickReleasePage = useCallback((url: string, id: string, status: Status) => {
-    let linkUrl: string = url
+    let linkUrl: string = url;
     if (status === 'RELEASED') {
-      linkUrl = `https://www.footlocker.ca/en/product/~/${id}.html`
-      window.open()
+      linkUrl = `https://www.footlocker.ca/en/product/~/${id}.html`;
+      window.open(linkUrl);
     }
-    window.open(linkUrl, '_blank')
-  }, [])
+    window.open(linkUrl, '_blank');
+  }, []);
 
   const onClickWatch = useCallback(
     (id: string) => {
-      const idFound = watchList[id]
+      const idFound = watchList[id];
       if (!idFound) {
         setWatchList({
           ...watchList,
           [id]: true,
-        })
+        });
       } else {
-        const watchListCopy = { ...watchList }
-        delete watchListCopy[id]
-        setWatchList(watchListCopy)
+        const watchListCopy = { ...watchList };
+        delete watchListCopy[id];
+        setWatchList(watchListCopy);
       }
     },
     [setWatchList, watchList],
-  )
+  );
 
   const filteredData = useMemo(() => {
     if (watchlistToggle) {
-      return data.filter((shoe) => !!watchList[shoe.id])
+      return data.filter((shoe) => !!watchList[shoe.id]);
     }
 
-    return data
-  }, [data, watchList, watchlistToggle])
+    return data;
+  }, [data, watchList, watchlistToggle]);
 
   return (
     <TableContainer sx={{ marginY: 3 }} component={Paper}>
@@ -143,7 +143,7 @@ function DataTable({ data }: { data: ShoesTableData[] }) {
         </TableBody>
       </Table>
     </TableContainer>
-  )
+  );
 }
 
-export default memo(DataTable)
+export default memo(DataTable);
