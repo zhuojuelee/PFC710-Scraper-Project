@@ -52,7 +52,7 @@ function ShoesTable() {
             <Typography variant="h6">
               {toggleWatchlist
                 ? 'Released Watch List'
-                : `${past.length} Past Releases - Preview and Info Page may not be unavailable`}
+                : `${past.length} Past Releases - Preview and Info Page may not be available`}
             </Typography>
           </Alert>
           <DataTable data={past} />
